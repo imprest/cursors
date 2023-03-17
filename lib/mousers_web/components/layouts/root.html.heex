@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" style="scrollbar-gutter: stable;">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content={get_csrf_token()} />
+    <.live_title suffix=" · Phoenix Framework">
+      <%= assigns[:page_title] || "Mousers" %>
+    </.live_title>
+    <%= if Mix.env() == :dev do %>
+      <script src="http://localhost:3000/src/index.tsx" type="module">
+      </script>
+    <% else %>
+      <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
+      <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
+      </script>
+    <% end %>
+  </head>
+  <body class="bg-white antialiased">
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <%= @inner_content %>
+  </body>
+</html>
