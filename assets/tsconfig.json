@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "strict": true,
     "target": "ESNext",
     "module": "ESNext",
@@ -13,6 +12,11 @@
       "vite/client"
     ],
     "noEmit": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "include": [
+      "src/**/*.d.ts",
+      "src/**/*.ts",
+      "src/**/*.tsx"
+    ]
   }
 }

@@ -1,7 +1,8 @@
 declare global {
-  interface Window {
-    userToken?: any
+  interface window {
+    userToken: any
   }
+  interface document { }
 }
 
 declare module 'phoenix'

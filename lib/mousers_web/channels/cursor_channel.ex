@@ -1,9 +1,11 @@
 defmodule MousersWeb.CursorChannel do
+  alias MousersWeb.Presence
   use MousersWeb, :channel
 
   @impl true
   def join("cursor:lobby", payload, socket) do
     if authorized?(payload) do
+      send(self(), :after_join)
       {:ok, socket}
     else
       {:error, %{reason: "unauthorized"}}
@@ -25,8 +27,30 @@ defmodule MousersWeb.CursorChannel do
     {:noreply, socket}
   end
 
+  # def handle_in("move", %{"x" => x, "y" => y}, socket) do
+  #   name = socket.assigns.current_user
+  #   broadcast(socket, "move", %{"x" => x, "y" => y, "name" => name})
+  #   {:noreply, socket}
+  # end
+
+  @impl true
+  def handle_info(:after_join, socket) do
+    {:ok, _} =
+      Presence.track(socket, socket.assigns.current_user, %{
+        online_at: inspect(System.system_time(:second))
+      })
+
+    push(socket, "presence_state", Presence.list(socket))
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_in("move", %{"x" => x, "y" => y}, socket) do
-    broadcast(socket, "move", %{"x" => x, "y" => y})
+    {:ok, _} =
+      Presence.update(socket, socket.assigns.current_user, fn previousState ->
+        Map.merge(previousState, %{online_at: inspect(System.system_time(:second)), x: x, y: y})
+      end)
+
     {:noreply, socket}
   end
 

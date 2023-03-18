@@ -13,7 +13,9 @@ defmodule Mousers.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Mousers.PubSub},
       # Start the Endpoint (http/https)
-      MousersWeb.Endpoint
+      MousersWeb.Endpoint,
+      # Start Presence system
+      MousersWeb.Presence
       # Start a worker by calling: Mousers.Worker.start_link(arg)
       # {Mousers.Worker, arg}
     ]

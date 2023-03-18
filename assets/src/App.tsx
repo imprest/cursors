@@ -1,21 +1,19 @@
-import { render } from "solid-js/web";
-import { For, createSignal } from 'solid-js';
-
-import { channel } from "./user_socket.ts";
-
+import { createSignal, createEffect } from 'solid-js';
+import { mouseMove } from './store';
 import logo from './logo.svg';
 import styles from './App.module.css';
 
 const App = () => {
   const [pos, setPos] = createSignal({ x: 0, y: 0 });
+  createEffect(() => {
+    mouseMove(pos())
+  })
 
   function handleMouseMove(event: any) {
     setPos({
       x: event.clientX,
       y: event.clientY
     })
-
-    channel.on('move', pos())
   }
 
   const [mousers, setMousers] = createSignal([])
@@ -28,15 +26,19 @@ const App = () => {
 
   return (
     <>
-      < div onMouseMove={handleMouseMove}>
-        <img src={logo} class={styles.logo} alt="logo" />
+      <div onMouseMove={handleMouseMove}>
         <section
           class="flex flex-col w-screen h-screen justify-center items-center text-center"
         >
+          <img src={logo} class={styles.logo} alt="logo" />
+          <div>
+            The mouse position is {pos().x} x {pos().y}
+          </div>
           <form
             id="msgform"
             class="rounded-xl bg-gradient-to-r to-pink-100 from-pink-50 p-8 drop-shadow-xl flex w-xs mx-auto space-x-3"
           >
+
             <input
               ref={input}
               class="flex-1 appearance-none border border-transparent py-2 px-4 bg-white text-gray-600 placeholder-gray-400 shadow-md rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-pink-600 focus:border-transparent"
