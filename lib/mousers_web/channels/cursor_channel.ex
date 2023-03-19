@@ -27,30 +27,48 @@ defmodule MousersWeb.CursorChannel do
     {:noreply, socket}
   end
 
-  # def handle_in("move", %{"x" => x, "y" => y}, socket) do
-  #   name = socket.assigns.current_user
-  #   broadcast(socket, "move", %{"x" => x, "y" => y, "name" => name})
-  #   {:noreply, socket}
-  # end
+  @impl true
+  def handle_in("msg_send", %{"msg" => msg}, socket) do
+    {:ok, _} =
+      Presence.update(socket, socket.assigns.current_user, fn previousState ->
+        Map.merge(
+          previousState,
+          %{
+            online_at: inspect(System.system_time(:second)),
+            msg: msg
+          }
+        )
+      end)
+
+    {:noreply, socket}
+  end
+
+  def handle_in("move", %{"x" => x, "y" => y}, socket) do
+    {:ok, _} =
+      Presence.update(socket, socket.assigns.current_user, fn previousState ->
+        Map.merge(
+          previousState,
+          %{
+            online_at: inspect(System.system_time(:second)),
+            x: x,
+            y: y,
+            color: Mousers.Colors.getHSL(socket.assigns.current_user)
+          }
+        )
+      end)
+
+    {:noreply, socket}
+  end
 
   @impl true
   def handle_info(:after_join, socket) do
     {:ok, _} =
       Presence.track(socket, socket.assigns.current_user, %{
-        online_at: inspect(System.system_time(:second))
+        online_at: inspect(System.system_time(:second)),
+        color: Mousers.Colors.getHSL(socket.assigns.current_user)
       })
 
     push(socket, "presence_state", Presence.list(socket))
-    {:noreply, socket}
-  end
-
-  @impl true
-  def handle_in("move", %{"x" => x, "y" => y}, socket) do
-    {:ok, _} =
-      Presence.update(socket, socket.assigns.current_user, fn previousState ->
-        Map.merge(previousState, %{online_at: inspect(System.system_time(:second)), x: x, y: y})
-      end)
-
     {:noreply, socket}
   end
 
