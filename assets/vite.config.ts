@@ -19,6 +19,18 @@ export default defineConfig(({ command }: any) => {
     },
     build: {
       target: 'esnext',
+      minify: true,
+      outDir: '../priv/static',
+      emptyOutDir: true,
+      manifest: false,
+      rollupOptions: {
+        input: ['src/index.tsx'],
+        output: {
+          entryFileNames: 'assets/[name].js',
+          chunkFileNames: 'assets/[name].js',
+          assetFileNames: 'assets/[name][extname]',
+        }
+      }
     },
   }
 });

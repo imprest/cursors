@@ -1,6 +1,6 @@
 import { createSignal, createEffect, batch } from 'solid-js';
 import { mouseMove, msgSend } from './store';
-import logo from './logo.svg';
+import logo from './../public/images/logo.svg';
 import styles from './App.module.css';
 
 const App = () => {

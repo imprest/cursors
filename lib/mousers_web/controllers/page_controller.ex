@@ -14,8 +14,4 @@ defmodule MousersWeb.PageController do
         )
     )
   end
-
-  # def vite(conn, _params) do
-  #   redirect(conn, externel: "http://localhost:3000/__vite_ping")
-  # end
 end

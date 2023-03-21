@@ -43,7 +43,6 @@ defmodule MousersWeb do
         layouts: [html: MousersWeb.Layouts]
 
       import Plug.Conn
-      import MousersWeb.Gettext
 
       unquote(verified_routes())
     end
@@ -85,7 +84,6 @@ defmodule MousersWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import MousersWeb.CoreComponents
-      import MousersWeb.Gettext
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
