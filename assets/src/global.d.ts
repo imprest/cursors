@@ -1,3 +1,5 @@
+export { };
+
 declare global {
   interface window {
     userToken: any
@@ -5,4 +7,3 @@ declare global {
   interface document { }
 }
 
-declare module 'phoenix'
