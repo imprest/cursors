@@ -1,10 +1,23 @@
-import { createSignal, createEffect, batch } from 'solid-js';
-import { mouseMove, msgSend } from './store';
+import { createSignal, createEffect, batch, For } from 'solid-js';
+import { createStore } from 'solid-js/store';
+import { mouseMove, msgSend, presence } from './store';
 import logo from './../public/images/logo.svg';
 import styles from './App.module.css';
+import Cursor from './components/cursor';
+
+type TCursor = { x: number, y: number, name: string, color: string };
 
 const App = () => {
+  const [cursors, setCursors] = createStore([]);
   const [pos, setPos] = createSignal({ x: 0, y: 0 });
+
+  presence.onSync(() => {
+    presence.list((name, { metas: [firstDevice] }) => {
+      const { x, y, color, msg } = firstDevice;
+      setCursors([{ name: name, x: x, y: y, color: color, msg: msg }])
+    })
+  })
+
   createEffect(() => {
     mouseMove(pos())
   })
@@ -59,9 +72,14 @@ const App = () => {
               Change
             </button>
           </form>
-          <ul id="cursor-list" />
+          <ul>
+            <For each={cursors}>
+              {(cursor: any) => {
+                return <Cursor x={cursor.x} y={cursor.y} name={cursor.name} color={cursor.color}></Cursor>
+              }}
+            </For>
+          </ul>
         </section>
-
       </div >
     </>
   );
