@@ -1,26 +1,30 @@
 import { createSignal, createEffect, batch, For } from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { createStore, reconcile } from 'solid-js/store';
 import { mouseMove, msgSend, presence } from './store';
-import logo from './../public/images/logo.svg';
+import logo from '/images/logo.svg';
 import styles from './App.module.css';
 import Cursor from './components/cursor';
+import type { TCursor } from './components/cursor';
 
-type TCursor = { x: number, y: number, name: string, color: string };
+type PresenceMetas = { metas: TCursor[] }
 
 const App = () => {
-  const [cursors, setCursors] = createStore([]);
-  const [pos, setPos] = createSignal({ x: 0, y: 0 });
+  // Presence tracking
+  const [cursors, setCursors] = createStore<TCursor[]>([]);
 
   presence.onSync(() => {
-    presence.list((name, { metas: [firstDevice] }) => {
+    const newCursors: Array<TCursor> = []
+    presence.list((name: string, { metas: [firstDevice] }: PresenceMetas) => {
       const { x, y, color, msg } = firstDevice;
-      setCursors([{ name: name, x: x, y: y, color: color, msg: msg }])
+      newCursors.push({ name, x, y, color, msg })
     })
+    setCursors(reconcile(newCursors))
   })
 
-  createEffect(() => {
-    mouseMove(pos())
-  })
+  // User mouse tracking and push position to server
+  const [pos, setPos] = createSignal({ x: 0, y: 0 });
+
+  createEffect(() => { mouseMove(pos()) })
 
   function handleMouseMove(event: any) {
     setPos({
@@ -74,8 +78,8 @@ const App = () => {
           </form>
           <ul>
             <For each={cursors}>
-              {(cursor: any) => {
-                return <Cursor x={cursor.x} y={cursor.y} name={cursor.name} color={cursor.color}></Cursor>
+              {(cursor) => {
+                return <Cursor x={cursor.x} y={cursor.y} name={cursor.name} color={cursor.color} msg={cursor.msg}></Cursor>
               }}
             </For>
           </ul>

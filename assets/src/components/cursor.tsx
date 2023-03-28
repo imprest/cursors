@@ -1,6 +1,7 @@
-import { createSignal, Show } from "solid-js";
+import { Show } from "solid-js";
+export type TCursor = { x: number, y: number, name: string, color: string, msg: string };
 
-export default function cursor(props) {
+export default function cursor(props: TCursor) {
   return (
     <li
       class='flex flex-col absolute pointer-events-none whitespace-nowrap overflow-hidden'
@@ -14,7 +15,6 @@ export default function cursor(props) {
         width="25px"
         height="25px"
         xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
         viewBox="0 0 21 21">
         <polygon
           fill="black"
