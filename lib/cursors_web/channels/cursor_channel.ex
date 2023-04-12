@@ -74,8 +74,8 @@ defmodule CursorsWeb.CursorChannel do
           %{
             time: :erlang.monotonic_time(),
             online_at: inspect(System.system_time(:second)),
-            x: x,
-            y: y,
+            x: x - 10,
+            y: y - 6,
             color: Colors.getHSL(socket.assigns.name)
           }
         )
@@ -87,12 +87,17 @@ defmodule CursorsWeb.CursorChannel do
   @impl true
   def handle_info(:after_join, socket) do
     presence = Presence.get_by_key(socket, socket.assigns.name)
-    metas = Map.get(presence, :metas)
+
+    metas =
+      case presence do
+        [] -> []
+        m -> Map.get(m, :metas, [])
+      end
 
     msg =
-      case hd(metas) do
-        [] -> ""
-        meta -> Map.get(meta, :msg)
+      case length(metas) do
+        0 -> ""
+        _ -> Map.get(hd(metas), :msg)
       end
 
     {:ok, _} =

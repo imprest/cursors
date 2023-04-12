@@ -38,7 +38,7 @@ defmodule Cursors.MixProject do
       {:ecto_sql, "~> 3.6"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 3.3"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
+      # {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.18.16"},
       {:floki, ">= 0.30.0", only: :test},
       {:swoosh, "~> 1.3"},
@@ -59,11 +59,11 @@ defmodule Cursors.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
+      setup: ["deps.get", "ecto.setup", "assets.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.build": ["cmd --cd assets pnpm i"],
+      "assets.setup": ["cmd --cd assets pnpm i", "cmd --cd assets pnpm run build"],
       "assets.deploy": ["cmd --cd assets pnpm run build", "phx.digest"]
     ]
   end
