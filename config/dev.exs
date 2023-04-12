@@ -1,21 +1,32 @@
 import Config
 
+# Configure your database
+config :cursors, Cursors.Repo,
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost",
+  database: "cursors_dev",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with esbuild to bundle .js and .css sources.
-config :mousers, MousersWeb.Endpoint,
+config :cursors, CursorsWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {127, 0, 0, 1}, port: 4000],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "dGZOgO/DfF2ZdPXO9bTc9J/g0eoPoUYn3cj96H7kToo1v9ucEi7l/1jUZmYlnATF",
+  secret_key_base: "LTx2LikOm8YqmmBNCVqF5MQRYLnF+G6G7M2rjGfOB+tvaam+oGAIfrLTxqmRxJDO",
   watchers: [
     pnpm: ["run", "dev", cd: Path.expand("../assets", __DIR__)]
+    #  esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
   ]
 
 # ## SSL Support
@@ -42,19 +53,18 @@ config :mousers, MousersWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :mousers, MousersWeb.Endpoint,
+config :cursors, CursorsWeb.Endpoint,
   live_reload: [
     patterns: [
       # ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
-      # ~r"priv/gettext/.*(po)$",
-      # ~r"lib/mousers_web/(controllers|live|components)/.*(ex|heex)$"
+      # ~r"lib/cursors_web/(controllers|live|components)/.*(ex|heex)$"
     ]
   ]
 
-config :exsync, addition_dirs: ["/lib/mousers_web"]
+config :exsync, addition_dirs: ["/lib/cursors_web"]
 
 # Enable dev routes for dashboard and mailbox
-config :mousers, dev_routes: true
+config :cursors, dev_routes: true
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
@@ -65,3 +75,6 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+# Disable swoosh api client as it is only required for production adapters.
+config :swoosh, :api_client, false

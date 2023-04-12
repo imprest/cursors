@@ -1,4 +1,4 @@
-defmodule MousersWeb.ChannelCase do
+defmodule CursorsWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -11,7 +11,7 @@ defmodule MousersWeb.ChannelCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use MousersWeb.ChannelCase, async: true`, although
+  by setting `use CursorsWeb.ChannelCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -21,14 +21,15 @@ defmodule MousersWeb.ChannelCase do
     quote do
       # Import conveniences for testing with channels
       import Phoenix.ChannelTest
-      import MousersWeb.ChannelCase
+      import CursorsWeb.ChannelCase
 
       # The default endpoint for testing
-      @endpoint MousersWeb.Endpoint
+      @endpoint CursorsWeb.Endpoint
     end
   end
 
-  setup _tags do
+  setup tags do
+    Cursors.DataCase.setup_sandbox(tags)
     :ok
   end
 end

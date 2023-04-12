@@ -1,9 +1,9 @@
-export { };
+// Ensure this is treated as a module.
+export {};
 
 declare global {
-  interface window {
-    userToken: any
+  interface Window {
+    userToken: string
   }
-  interface document { }
+  interface document {}
 }
-

@@ -1,4 +1,4 @@
-# Mousers
+# Cursors
 
 To start your Phoenix server:
 

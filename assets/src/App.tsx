@@ -1,7 +1,6 @@
 import { createSignal, createEffect, batch, For } from 'solid-js';
 import { createStore, reconcile } from 'solid-js/store';
 import { mouseMove, msgSend, presence } from './store';
-import logo from '/images/logo.svg';
 import styles from './App.module.css';
 import Cursor from './components/cursor';
 import type { TCursor } from './components/cursor';
@@ -14,8 +13,9 @@ const App = () => {
 
   presence.onSync(() => {
     const newCursors: Array<TCursor> = []
-    presence.list((name: string, { metas: [firstDevice] }: PresenceMetas) => {
-      const { x, y, color, msg } = firstDevice;
+    presence.list((name: string, { metas }: PresenceMetas) => {
+      let m = (metas.length === 1) ? metas[0] : metas.sort((a, b) => Math.abs(a.time!) - Math.abs(b.time!))[0]
+      const { x, y, color, msg } = m;
       newCursors.push({ name, x, y, color, msg })
     })
     setCursors(reconcile(newCursors))
@@ -51,7 +51,7 @@ const App = () => {
         <section
           class="flex flex-col w-screen h-screen justify-center items-center text-center"
         >
-          <img src={logo} class={styles.logo} alt="logo" />
+          <img src='/images/logo.svg' class={styles.logo} alt="logo" />
           <form
             id="msgform"
             class="rounded-xl bg-gradient-to-r to-pink-100 from-pink-50 p-8 drop-shadow-xl flex w-xs mx-auto space-x-3"

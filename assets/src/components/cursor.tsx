@@ -1,5 +1,5 @@
 import { Show } from "solid-js";
-export type TCursor = { x: number, y: number, name: string, color: string, msg: string };
+export type TCursor = { x: number, y: number, name: string, color: string, msg: string, time?: number };
 
 export default function cursor(props: TCursor) {
   return (
@@ -36,3 +36,4 @@ export default function cursor(props: TCursor) {
     </li>
   )
 }
+

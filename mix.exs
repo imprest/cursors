@@ -1,9 +1,9 @@
-defmodule Mousers.MixProject do
+defmodule Cursors.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :mousers,
+      app: :cursors,
       version: "0.1.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -18,7 +18,7 @@ defmodule Mousers.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Mousers.Application, []},
+      mod: {Cursors.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -32,16 +32,21 @@ defmodule Mousers.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:argon2_elixir, "~> 3.0"},
       {:phoenix, "~> 1.7.2"},
+      {:phoenix_ecto, "~> 4.4"},
+      {:ecto_sql, "~> 3.6"},
+      {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 3.3"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.18.16"},
       {:floki, ">= 0.30.0", only: :test},
+      {:swoosh, "~> 1.3"},
+      {:finch, "~> 0.13"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"},
-      # live beam reloader
+      {:bandit, ">= 0.7.7"},
       {:exsync, "~> 0.2.4", only: :dev}
     ]
   end
@@ -54,7 +59,11 @@ defmodule Mousers.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get"],
+      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+      "assets.build": ["cmd --cd assets pnpm i"],
       "assets.deploy": ["cmd --cd assets pnpm run build", "phx.digest"]
     ]
   end

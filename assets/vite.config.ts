@@ -10,6 +10,7 @@ export default defineConfig(({ command }: any) => {
     })
 
     process.stdin.resume()
+
   }
 
   return {
@@ -20,15 +21,15 @@ export default defineConfig(({ command }: any) => {
     build: {
       target: 'esnext',
       minify: true,
-      outDir: '../priv/static',
+      outDir: "../priv/static/assets",
       emptyOutDir: true,
       manifest: false,
       rollupOptions: {
-        input: ['src/index.tsx'],
+        input: ['src/index.tsx', 'src/app.js'],
         output: {
-          entryFileNames: 'assets/[name].js',
-          chunkFileNames: 'assets/[name].js',
-          assetFileNames: 'assets/[name][extname]',
+          entryFileNames: '[name].js',
+          chunkFileNames: '[name].js',
+          assetFileNames: '[name][extname]'
         }
       }
     },
