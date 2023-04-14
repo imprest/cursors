@@ -3,7 +3,7 @@ defmodule CursorsWeb.SolidHTML do
 
   def index(assigns) do
     ~H"""
-    <%= if Mix.env() == :dev do %>
+    <%= if System.get_env("PHX_SERVER", "false") == "false" do %>
       <script src="http://localhost:3000/src/index.tsx" type="module">
       </script>
     <% else %>

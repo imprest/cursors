@@ -21,7 +21,7 @@ defmodule CursorsWeb.Endpoint do
   plug(Plug.Static,
     at: "/",
     from: :cursors,
-    gzip: false,
+    gzip: true,
     only: CursorsWeb.static_paths()
   )
 
